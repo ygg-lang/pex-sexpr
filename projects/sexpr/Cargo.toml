@@ -1,9 +1,8 @@
 [package]
-name = "sexpr"
-publish = false
+name = "lispify"
 version = "0.0.0"
 authors = ["Aster <192607617@qq.com>"]
-description = "..."
+description = "Pretty print lisp"
 repository = "https://github.com/oovm/sub_projects"
 documentation = "https://docs.rs/sub_projects"
 readme = "Readme.md"
@@ -12,6 +11,7 @@ edition = "2021"
 exclude = ["package.json", "tests/**"]
 
 [dependencies]
+pretty = "0.12.1"
 pex = "0.1.0"
 
 [dev-dependencies]

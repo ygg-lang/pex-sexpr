@@ -6,5 +6,7 @@
 
 mod errors;
 mod parser;
+mod display;
 
+pub use self::display::Lisp;
 pub use crate::errors::{Error, Result};
