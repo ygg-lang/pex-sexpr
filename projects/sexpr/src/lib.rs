@@ -4,13 +4,13 @@
 #![doc(html_logo_url = "https://raw.githubusercontent.com/oovm/shape-rs/dev/projects/images/Trapezohedron.svg")]
 #![doc(html_favicon_url = "https://raw.githubusercontent.com/oovm/shape-rs/dev/projects/images/Trapezohedron.svg")]
 
-mod errors;
-mod parser;
 mod display;
-mod traits;
+mod errors;
 pub mod helpers;
-
-pub use self::display::ListNumber;
-pub use self::traits::Lispify;
-pub use self::display::Lisp;
+mod parser;
+mod traits;
+pub use self::{
+    display::{Lisp, LispNumber, LispOperator},
+    traits::Lispify,
+};
 pub use crate::errors::{Error, Result};
