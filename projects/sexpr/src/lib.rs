@@ -7,6 +7,10 @@
 mod errors;
 mod parser;
 mod display;
+mod traits;
+pub mod helpers;
 
+pub use self::display::ListNumber;
+pub use self::traits::Lispify;
 pub use self::display::Lisp;
 pub use crate::errors::{Error, Result};

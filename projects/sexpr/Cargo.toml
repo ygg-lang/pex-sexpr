@@ -11,7 +11,7 @@ edition = "2021"
 exclude = ["package.json", "tests/**"]
 
 [dependencies]
-pretty = "0.12.1"
+pretty = { version = "0.12.1", features = ["termcolor"] }
 pex = "0.1.0"
 
 [dev-dependencies]
