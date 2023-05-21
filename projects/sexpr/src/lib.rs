@@ -10,7 +10,7 @@ pub mod helpers;
 mod parser;
 mod traits;
 pub use self::{
-    display::{Lisp, LispNumber, LispOperator},
+    display::{Lisp, LispNumber, LispSymbol, ListString},
     traits::Lispify,
 };
 pub use crate::errors::{Error, Result};
