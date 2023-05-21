@@ -4,7 +4,7 @@ use crate::{helpers::colored_text, Lispify};
 use pretty::{Doc, RcDoc};
 
 ///
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum Lisp {
     Any(Vec<Lisp>),
     Keyword(String),
@@ -15,7 +15,7 @@ pub enum Lisp {
     String(Box<ListString>),
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct ListString {
     pub text: String,
     pub unit: String,
@@ -25,7 +25,7 @@ impl From<ListString> for Lisp {
         Lisp::String(Box::new(value))
     }
 }
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct LispNumber {
     pub number: String,
     pub unit: String,
@@ -37,7 +37,7 @@ impl From<LispSymbol> for Lisp {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct LispSymbol {
     pub name: String,
     pub path: Vec<String>,
