@@ -7,7 +7,7 @@
 mod display;
 mod errors;
 pub mod helpers;
-mod parser;
+// mod parser;
 mod traits;
 pub use self::{
     display::{Lisp, LispNumber, LispSymbol, ListString},

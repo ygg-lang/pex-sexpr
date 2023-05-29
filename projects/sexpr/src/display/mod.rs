@@ -3,15 +3,22 @@ use pretty::termcolor::{Color, ColorSpec};
 use crate::{helpers::colored_text, Lispify};
 use pretty::{Doc, RcDoc};
 
-///
+/// The lisp data structure
 #[derive(Clone, Debug)]
 pub enum Lisp {
+    /// A normal list of lisp
     Any(Vec<Lisp>),
+    /// Mark as a keyword
     Keyword(String),
+    /// Mark as a function
     Function(String),
+    /// Mark as a operator
     Operator(String),
+    /// Mark as a number
     Number(Box<LispNumber>),
+    /// Mark as a symbol
     Symbol(Box<LispSymbol>),
+    /// Mark as a string
     String(Box<ListString>),
 }
 

@@ -1,6 +1,6 @@
 [package]
-name = "lispify"
-version = "0.0.0"
+name = "vpm"
+version = "0.0.1"
 authors = ["Aster <192607617@qq.com>"]
 description = "Pretty print lisp"
 repository = "https://github.com/oovm/sub_projects"
@@ -12,7 +12,7 @@ exclude = ["package.json", "tests/**"]
 
 [dependencies]
 pretty = { version = "0.12.1", features = ["termcolor"] }
-pex = "0.1.0"
+#pex = "0.1.11"
 
 [dev-dependencies]
 
