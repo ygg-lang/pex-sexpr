@@ -1,5 +1,5 @@
 [package]
-name = "vpm"
+name = "lispify"
 version = "0.0.1"
 authors = ["Aster <192607617@qq.com>"]
 description = "Pretty print lisp"

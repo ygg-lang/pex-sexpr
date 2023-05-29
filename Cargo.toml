@@ -1,7 +1,7 @@
 [workspace]
 members = ["projects/*"]
 default-members = [
-    "projects/sexpr",
+    "projects/lispify",
     "projects/indentation",
 ]
 exclude = [
