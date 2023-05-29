@@ -2,6 +2,7 @@
 members = ["projects/*"]
 default-members = [
     "projects/sexpr",
+    "projects/indentation",
 ]
 exclude = [
     "projects/.DS_Store",

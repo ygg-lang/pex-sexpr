@@ -1,5 +1,5 @@
-use std::fmt::Formatter;
-use std::ops::Deref;
+use core::fmt::Formatter;
+use core::ops::Deref;
 use crate::IndentFormatter;
 
 impl<'a, 'i> From<&'i mut Formatter<'a>> for IndentFormatter<'a,'i> {
