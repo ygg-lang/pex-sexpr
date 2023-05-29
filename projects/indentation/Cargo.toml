@@ -1,6 +1,6 @@
 [package]
 name = "indentation"
-version = "0.1.3"
+version = "0.1.5"
 authors = ["Aster <192607617@qq.com>"]
 categories = ["text-processing"]
 description = "Indentation Formatter"
