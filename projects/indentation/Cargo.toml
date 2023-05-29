@@ -1,0 +1,18 @@
+[package]
+name = "indentation"
+version = "0.1.2"
+authors = ["Aster <192607617@qq.com>"]
+categories = ["text-processing"]
+description = "Indentation Formatter"
+keywords = ["indentation", "formatter"]
+repository = "https://github.com/oovm/awsl-rs"
+readme = "Readme.md"
+license = "MPL-2.0"
+edition = "2021"
+
+[dependencies]
+
+[dev-dependencies]
+
+[features]
+default = []
