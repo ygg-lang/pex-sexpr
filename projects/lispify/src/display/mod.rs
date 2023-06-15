@@ -1,8 +1,9 @@
-use std::borrow::Cow;
-use std::collections::VecDeque;
-use std::ops::{Add, AddAssign, BitAnd, BitAndAssign};
-use pretty_print::{ PrettyPrint, PrettyProvider, PrettyTree};
-use pretty_print::helpers::PrettySequence;
+use pretty_print::{helpers::PrettySequence, PrettyPrint, PrettyProvider, PrettyTree};
+use std::{
+    borrow::Cow,
+    collections::VecDeque,
+    ops::{Add, AddAssign, BitAnd, BitAndAssign},
+};
 
 pub mod builder;
 mod display;
@@ -12,17 +13,20 @@ use pretty_print::PrettyPrintKind;
 /// The lisp data structure
 #[derive(Clone, Debug)]
 pub enum Lisp {
+    /// A single atom
     Atomic(Box<LispStyled>),
+    /// A list of atoms
     Concat(VecDeque<Lisp>),
+    /// A list of lists
     Sequence(VecDeque<Lisp>),
 }
 
+/// A single atom
 #[derive(Clone, Debug)]
 pub struct LispStyled {
     text: Cow<'static, str>,
     style: PrettyPrintKind,
 }
-
 
 impl Default for Lisp {
     fn default() -> Self {
@@ -30,7 +34,10 @@ impl Default for Lisp {
     }
 }
 
-impl<T> AddAssign<T> for Lisp where T: Into<Lisp> {
+impl<T> AddAssign<T> for Lisp
+where
+    T: Into<Lisp>,
+{
     fn add_assign(&mut self, rhs: T) {
         match self {
             Lisp::Sequence(list) => list.push_back(rhs.into()),
@@ -44,7 +51,10 @@ impl<T> AddAssign<T> for Lisp where T: Into<Lisp> {
     }
 }
 
-impl<T> BitAndAssign<T> for Lisp where T: Into<Lisp> {
+impl<T> BitAndAssign<T> for Lisp
+where
+    T: Into<Lisp>,
+{
     fn bitand_assign(&mut self, rhs: T) {
         match self {
             Lisp::Concat(list) => list.push_back(rhs.into()),
@@ -58,7 +68,10 @@ impl<T> BitAndAssign<T> for Lisp where T: Into<Lisp> {
     }
 }
 
-impl<T> Add<T> for Lisp where T: Into<Lisp> {
+impl<T> Add<T> for Lisp
+where
+    T: Into<Lisp>,
+{
     type Output = Lisp;
 
     fn add(mut self, rhs: T) -> Self::Output {
@@ -67,7 +80,10 @@ impl<T> Add<T> for Lisp where T: Into<Lisp> {
     }
 }
 
-impl<T> BitAnd<T> for Lisp where T: Into<Lisp> {
+impl<T> BitAnd<T> for Lisp
+where
+    T: Into<Lisp>,
+{
     type Output = Lisp;
 
     fn bitand(mut self, rhs: T) -> Self::Output {
@@ -76,8 +92,11 @@ impl<T> BitAnd<T> for Lisp where T: Into<Lisp> {
     }
 }
 
-impl<T> FromIterator<T> for Lisp where T: Into<Lisp> {
-    fn from_iter<I: IntoIterator<Item=T>>(iter: I) -> Self {
+impl<T> FromIterator<T> for Lisp
+where
+    T: Into<Lisp>,
+{
+    fn from_iter<I: IntoIterator<Item = T>>(iter: I) -> Self {
         Lisp::Sequence(iter.into_iter().map(|x| x.into()).collect())
     }
 }

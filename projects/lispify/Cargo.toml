@@ -1,6 +1,6 @@
 [package]
 name = "lispify"
-version = "0.0.2"
+version = "0.0.3"
 authors = ["Aster <192607617@qq.com>"]
 description = "Pretty print lisp"
 repository = "https://github.com/ygg-lang/pex-lisp"

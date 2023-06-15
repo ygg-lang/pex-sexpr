@@ -30,23 +30,46 @@ impl Lisp {
         Self::Sequence(VecDeque::with_capacity(capacity))
     }
     /// Create a new lisp sequence
+    pub fn extend<I, T>(&mut self, items: I)
+    where
+        I: IntoIterator<Item = T>,
+        T: Into<Lisp>,
+    {
+        for item in items {
+            *self += item.into();
+        }
+    }
+    /// Create a new lisp sequence
+    pub fn extend_slice<T>(&mut self, items: &[T])
+    where
+        T: Into<Lisp> + Clone,
+    {
+        for item in items.iter().cloned() {
+            *self += item.into();
+        }
+    }
+
+    /// Create a new lisp sequence
     pub fn symbol<S: Into<Cow<'static, str>>>(text: S) -> Self {
         LispStyled { text: text.into(), style: PrettyPrintKind::Operator }.into()
     }
-
+    /// Create a new lisp sequence
     pub fn string<S: Into<Cow<'static, str>>>(text: S) -> Self {
         LispStyled { text: text.into(), style: PrettyPrintKind::String }.into()
     }
+    /// Create a new lisp sequence
     pub fn number<S: Into<Cow<'static, str>>>(text: S) -> Self {
         LispStyled { text: text.into(), style: PrettyPrintKind::Number }.into()
     }
+    /// Create a new lisp sequence
     pub fn unit<S: Into<Cow<'static, str>>>(text: S) -> Self {
         LispStyled { text: text.into(), style: PrettyPrintKind::Annotation }.into()
     }
-
+    /// Create a new lisp sequence
     pub fn keyword<S: Into<Cow<'static, str>>>(text: S) -> Self {
         LispStyled { text: text.into(), style: PrettyPrintKind::Keyword }.into()
     }
+    /// Create a new lisp sequence
     pub fn operator<S, I, T>(text: S, items: I) -> Self
     where
         S: Into<Cow<'static, str>>,
