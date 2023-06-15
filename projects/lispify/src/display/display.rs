@@ -1,5 +1,4 @@
 use super::*;
-use std::fmt::{Display, Formatter};
 
 impl PrettyPrint for Lisp {
     fn pretty(&self, theme: &PrettyProvider) -> PrettyTree {
@@ -48,7 +47,7 @@ impl PrettyPrint for LispStyled {
 }
 
 impl Display for Lisp {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> core::fmt::Result {
         let theme = PrettyProvider::new(80);
         f.write_str(&self.pretty_string(&theme))
     }

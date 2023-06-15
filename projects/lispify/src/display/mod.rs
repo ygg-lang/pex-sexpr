@@ -1,15 +1,19 @@
-use pretty_print::{helpers::PrettySequence, PrettyPrint, PrettyProvider, PrettyTree};
-use std::{
-    borrow::Cow,
-    collections::VecDeque,
-    ops::{Add, AddAssign, BitAnd, BitAndAssign},
-};
-
 pub mod builder;
 mod display;
 
-use pretty_print::PrettyPrintKind;
-
+use alloc::{
+    borrow::{Cow, ToOwned},
+    boxed::Box,
+    collections::VecDeque,
+};
+use core::{
+    fmt::{Display, Formatter},
+    ops::{Add, AddAssign, BitAnd, BitAndAssign},
+};
+use pretty_print::{
+    helpers::{PrettyPrintKind, PrettySequence},
+    PrettyBuilder, PrettyPrint, PrettyProvider, PrettyTree,
+};
 /// The lisp data structure
 #[derive(Clone, Debug)]
 pub enum Lisp {
