@@ -14,3 +14,4 @@ pub use self::{
     traits::Lispify,
 };
 pub use crate::errors::{Error, Result};
+pub use pretty_print::PrettyPrint;

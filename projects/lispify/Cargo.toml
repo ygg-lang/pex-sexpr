@@ -11,8 +11,8 @@ edition = "2021"
 exclude = ["package.json", "tests/**"]
 
 [dependencies.pretty-print]
-version= "0.1.5"
-path = 'C:\Users\Dell\CLionProjects\pretty-print\projects\pretty-print'
+version= "0.1.7"
+#path = 'C:\Users\Dell\CLionProjects\pretty-print\projects\pretty-print'
 
 [dev-dependencies]
 
