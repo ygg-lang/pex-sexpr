@@ -1,18 +1,18 @@
 [package]
 name = "lispify"
-version = "0.0.1"
+version = "0.0.2"
 authors = ["Aster <192607617@qq.com>"]
 description = "Pretty print lisp"
-repository = "https://github.com/oovm/sub_projects"
-documentation = "https://docs.rs/sub_projects"
+repository = "https://github.com/ygg-lang/pex-lisp"
+documentation = "https://docs.rs/lispify"
 readme = "Readme.md"
 license = "MPL-2.0"
 edition = "2021"
 exclude = ["package.json", "tests/**"]
 
-[dependencies]
-pretty = { version = "0.12.1", features = ["termcolor"] }
-#pex = "0.1.11"
+[dependencies.pretty-print]
+version= "0.1.5"
+path = 'C:\Users\Dell\CLionProjects\pretty-print\projects\pretty-print'
 
 [dev-dependencies]
 
