@@ -1,34 +1,133 @@
-use std::ops::{Add, AddAssign};
+use std::borrow::Cow;
+use std::ops::{Add, AddAssign, BitAnd, BitAndAssign};
 use pretty_print::{AnsiStyle, PrettyPrint, PrettyProvider, PrettyTree};
-use crate::LispString;
+use pretty_print::helpers::PrettySequence;
 
-pub mod string_node;
+pub mod builder;
+
+use pretty_print::PrettyPrintKind;
 
 /// The lisp data structure
 #[derive(Clone, Debug)]
 pub enum Lisp {
-    Keyword(String),
-    Symbol(String),
-    Number(String),
-    String(Box<LispString>),
-    List(Vec<Lisp>),
+    Atomic(Box<LispStyled>),
+    Concat(Vec<Lisp>),
+    Sequence(Vec<Lisp>),
+}
+
+#[derive(Clone, Debug)]
+pub struct LispStyled {
+    text: Cow<'static, str>,
+    style: PrettyPrintKind,
+}
+
+impl PrettyPrint for Lisp {
+    fn pretty(&self, theme: &PrettyProvider) -> PrettyTree {
+        match self {
+            Lisp::Atomic(value) => {
+                value.pretty(theme)
+            }
+            Lisp::Concat(values) => {
+                let mut result = theme.concat();
+                for value in values {
+                    result = result.add(value.pretty(theme));
+                }
+                result
+            }
+            Lisp::Sequence(values) => {
+                let mut terms = PrettySequence::new(values.len());
+                for value in values {
+                    terms = terms.add(value.pretty(theme));
+                }
+            }
+        }
+    }
 }
 
 
+impl PrettyPrint for LispStyled {
+    fn pretty(&self, theme: &PrettyProvider) -> PrettyTree {
+        match self.style {
+            PrettyPrintKind::Normal => {
+                theme.text(self.get_text())
+            }
+            PrettyPrintKind::Keyword => {
+                theme.keyword(self.get_text())
+            }
+            PrettyPrintKind::String => {
+                theme.string(self.get_text())
+            }
+            PrettyPrintKind::Number => {
+                theme.number(self.get_text())
+            }
+            PrettyPrintKind::Annotation => {
+                theme.annotation(self.get_text())
+            }
+            PrettyPrintKind::Argument => {
+                theme.argument(self.get_text(), false)
+            }
+            PrettyPrintKind::ArgumentMutable => {
+                theme.argument(self.get_text(), true)
+            }
+            PrettyPrintKind::Local => {
+                theme.variable(self.get_text(), false)
+            }
+            PrettyPrintKind::LocalMutable => {
+                theme.variable(self.get_text(), true)
+            }
+            PrettyPrintKind::Operator => {
+                theme.operator(self.get_text())
+            }
+            PrettyPrintKind::Structure => {
+                theme.structure(self.get_text())
+            }
+            PrettyPrintKind::Class => {
+                theme.structure(self.get_text())
+            }
+            PrettyPrintKind::Union => {
+                theme.structure(self.get_text())
+            }
+            PrettyPrintKind::UnionDisjoint => {
+                theme.structure(self.get_text())
+            }
+            PrettyPrintKind::Variant => {
+                theme.argument(self.get_text(), false)
+            }
+            PrettyPrintKind::Interface => {
+                theme.interface(self.get_text())
+            }
+            PrettyPrintKind::Trait => {
+                theme.interface(self.get_text())
+            }
+        }
+    }
+}
 
 impl Default for Lisp {
     fn default() -> Self {
-        Self::List(Vec::new())
+        Self::Sequence(Vec::new())
     }
 }
 
 impl<T> AddAssign<T> for Lisp where T: Into<Lisp> {
     fn add_assign(&mut self, rhs: T) {
         match self {
-            Lisp::List(list) => list.push(rhs.into()),
+            Lisp::Sequence(list) => list.push(rhs.into()),
             _ => {
                 let mut list = vec![self.clone(), rhs.into()];
-                *self = Lisp::List(list);
+                *self = Lisp::Sequence(list);
+            }
+        }
+    }
+}
+
+impl<T> BitAndAssign<T> for Lisp where T: Into<Lisp> {
+    fn bitand_assign(&mut self, rhs: T) {
+        match self {
+            Lisp::Concat(list) => list.push(rhs.into()),
+            _ => {
+                let mut list = vec![self.clone(), rhs.into()];
+                *self = Lisp::Concat(list);
             }
         }
     }
@@ -43,102 +142,12 @@ impl<T> Add<T> for Lisp where T: Into<Lisp> {
     }
 }
 
-//
-// impl From<ListString> for Lisp {
-//     fn from(value: ListString) -> Self {
-//         Lisp::String(Box::new(value))
-//     }
-// }
-//
-// #[derive(Clone, Debug)]
-// pub struct LispNumber {
-//     pub number: String,
-//     pub unit: String,
-// }
-//
-// impl From<LispSymbol> for Lisp {
-//     fn from(value: LispSymbol) -> Self {
-//         Lisp::Symbol(Box::new(value))
-//     }
-// }
-//
-// #[derive(Clone, Debug)]
-// pub struct LispSymbol {
-//     pub name: String,
-//     pub path: Vec<String>,
-// }
-//
-// impl From<LispNumber> for Lisp {
-//     fn from(value: LispNumber) -> Self {
-//         Lisp::Number(Box::new(value))
-//     }
-// }
-//
-// impl LispSymbol {
-//     pub fn new<S: ToString>(name: S) -> Self {
-//         LispSymbol { name: name.to_string(), path: vec![] }
-//     }
-//
-//     pub(crate) fn to_doc(&self) -> RcDoc<ColorSpec> {
-//         let mut term = colored_text(&self.name, Color::Red);
-//         for symbol in &self.path {
-//             let new = colored_text(symbol, Color::Red);
-//             term = term.append(RcDoc::text("∷")).append(new)
-//         }
-//         term
-//     }
-// }
-//
-// impl LispNumber {
-//     pub(crate) fn to_doc(&self) -> RcDoc<ColorSpec> {
-//         let n = RcDoc::text(&self.number).annotate(ColorSpec::new().set_fg(Some(Color::Red)).clone());
-//         if self.unit.is_empty() {
-//             n
-//         } else {
-//             let unit = RcDoc::text(&self.unit).annotate(ColorSpec::new().set_fg(Some(Color::Cyan)).clone());
-//             n.append(unit)
-//         }
-//     }
-// }
-//
-// impl ListString {
-//     pub(crate) fn to_doc(&self) -> RcDoc<ColorSpec> {
-//         let n = colored_text(&self.text, Color::Green);
-//         if self.unit.is_empty() {
-//             n
-//         } else {
-//             let unit = colored_text(&self.unit, Color::Cyan);
-//             unit.append(n)
-//         }
-//     }
-// }
-//
-// impl Lisp {
-//     pub fn keyword<S: ToString>(name: S) -> Self {
-//         Lisp::Keyword(name.to_string())
-//     }
-//     pub fn function<S: ToString>(name: S) -> Self {
-//         Lisp::Function(name.to_string())
-//     }
-//     pub fn operator<S: ToString, T: Lispify>(name: S, arguments: &[T]) -> Self {
-//         let head = Lisp::Operator(name.to_string());
-//         let mut terms = Vec::with_capacity(arguments.len() + 1);
-//         terms.push(head);
-//         terms.extend(arguments.iter().map(|x| x.lispify().into()));
-//         Lisp::Any(terms)
-//     }
-//
-//     pub(crate) fn to_doc(&self) -> RcDoc<ColorSpec> {
-//         match self {
-//             Lisp::Any(xs) => RcDoc::text("(")
-//                 .append(RcDoc::intersperse(xs.into_iter().map(|x| x.to_doc()), Doc::line()).nest(2).group())
-//                 .append(RcDoc::text(")")),
-//             Lisp::Keyword(v) => colored_text(v, Color::Magenta),
-//             Lisp::Operator(v) => colored_text(v, Color::Blue),
-//             Lisp::Function(v) => colored_text(v, Color::Blue),
-//             Lisp::Symbol(v) => v.to_doc(),
-//             Lisp::String(v) => v.to_doc(),
-//             Lisp::Number(x) => x.to_doc(),
-//         }
-//     }
-// }
+impl<T> BitAnd<T> for Lisp where T: Into<Lisp> {
+    type Output = Lisp;
+
+    fn bitand(mut self, rhs: T) -> Self::Output {
+        self &= rhs;
+        self
+    }
+}
+
